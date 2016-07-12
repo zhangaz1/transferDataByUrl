@@ -21,8 +21,18 @@
 				var domainId = domainSelector.val();
 
 				console.log('change domain to: ', domainId)
-				dataTransfer.updateSearchData({
+				dataTransfer.setDomainId(
 					domainId
+				);
+
+				$('a').each(function(index, ele) {
+					var urlObj = new Url(ele.href);
+					urlObj.updateSearchData({
+						d: domainId
+					});
+					var href = urlObj.getUrl();
+					// href = href.substring(0, location.origin.length); // ???
+					ele.href = href;
 				});
 
 				if (!domainId) {

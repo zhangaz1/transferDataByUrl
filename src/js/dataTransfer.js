@@ -1,5 +1,7 @@
 ;
 (function(ns, win) {
+    var domainIdKey = 'd';
+
     class DataTransfer {
         constructor(scope, win) {
             this.parent = scope;
@@ -8,6 +10,15 @@
 
         get win() {
             return this._win || window;
+        }
+
+        setDomainId(domainId) {
+            this.updateSearchData({
+                [domainIdKey]: domainId
+            });
+        }
+        getDomainId(domainId) {
+            return this.getSearchData(domainIdKey);
         }
 
         getSearchData(key = null) {
