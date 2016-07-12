@@ -20,7 +20,9 @@
 				var domainId = domainSelector.val();
 
 				console.log('change domain to: ', domainId)
-				dataTransfer.setDomainId(domainId);
+				dataTransfer.setSearchData({
+					domainId
+				});
 
 				if (!domainId) {
 					alert('warning: domain is null, select please.');

@@ -3,7 +3,7 @@
     var emptyString = '';
     var searchPrefix = '?';
     var searchSplitor = '&';
-    var keyValueSplitor = '=';
+    var searchKeyValueSplitor = '=';
     var searchPrefixRex = new RegExp('^\\' + searchPrefix);
 
     class dataTransfer {
@@ -11,21 +11,28 @@
             this.parent = scope;
         }
 
-        getDomainId() {
-
-        }
-
-        setDomainId(domainId) {
+        getSearchData(key = null) {
             var location = win.location;
 
-            var oldSearch = location.search;
-            var newSearch = '?domainId=' + domainId;
+            var searchObj = getSearchObj(location.search);
+
+            return key ?
+                searchObj[key] :
+                searchObj;
+        }
+
+        setSearchData(data) {
+            var location = win.location;
+
+            var searchObj = getSearchObj(location.search);
+            searchObj = Object.assign(searchObj, data);
+
+            var newSearchStr = createSearchString(searchObj);
 
             var newUrl = [
                 location.origin,
                 location.pathname,
-                searchPrefix,
-                newSearch,
+                newSearchStr,
                 location.hash
             ].join(emptyString);
 
@@ -41,10 +48,29 @@
 
     function getSearchObj(searchStr) {
         searchStr = searchStr.replace(searchPrefixRex, emptyString);
-        var keyValues = searchStr.split(searchSplitor);
+        var keyValues = searchStr.split(searchSplitor)
+            .filter(function(kv) {
+                return kv;
+            });
 
         var searchObj = Object.create(null);
+
+        _.each(keyValues, function(kv) {
+            var kvArr = kv.split(searchKeyValueSplitor);
+            searchObj[kvArr[0]] = kvArr[1];
+        });
+
         return searchObj;
+    }
+
+    function createSearchString(obj) {
+        var keyValueArray = _.toPairs(obj);
+
+        keyValueArray = keyValueArray.map(function(keyValue) {
+            return keyValue.join(searchKeyValueSplitor);
+        });
+
+        return searchPrefix + keyValueArray.join(searchSplitor);
     }
 
 })(window, window); // 建议此处传入自己的名称空间
