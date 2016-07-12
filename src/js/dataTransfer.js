@@ -1,12 +1,6 @@
 ;
 (function(ns, win) {
-    var emptyString = '';
-    var searchPrefix = '?';
-    var searchSplitor = '&';
-    var searchKeyValueSplitor = '=';
-    var searchPrefixRex = new RegExp('^\\' + searchPrefix);
-
-    class dataTransfer {
+    class DataTransfer {
         constructor(scope, win) {
             this.parent = scope;
             this._win = win;
@@ -17,65 +11,31 @@
         }
 
         getSearchData(key = null) {
-            var location = this.win.location;
+            var urlObj = new ns.Url(this.win.location.href);
+            return urlObj.getSearchData(key);
+        }
 
-            var searchObj = getSearchObj(location.search);
-
-            return key ?
-                searchObj[key] :
-                searchObj;
+        updateSearchData(data) {
+            var urlObj = new ns.Url(this.win.location.href);
+            urlObj.updateSearchData(data);
+            history.pushState(null, this.win.title, urlObj.getUrl());
         }
 
         setSearchData(data) {
-            var location = this.win.location;
-
-            var searchObj = getSearchObj(location.search);
-            searchObj = Object.assign(searchObj, data);
-
-            var newSearchStr = createSearchString(searchObj);
-
-            var newUrl = [
-                location.origin,
-                location.pathname,
-                newSearchStr,
-                location.hash
-            ].join(emptyString);
-
-            history.pushState(null, this.win.title, newUrl);
+            var urlObj = new ns.Url(this.win.location.href);
+            urlObj.setSearchData(data);
+            history.pushState(null, this.win.title, urlObj.getUrl());
         }
     }
 
+    if(!ns.DataTransfer) {
+        ns.DataTransfer = DataTransfer;
+    }
+
     if(!ns.dataTransfer) {
-        ns.dataTransfer = new dataTransfer(ns, win);
+        ns.dataTransfer = new DataTransfer(ns, win);
     }
 
     return void(0);
-
-    function getSearchObj(searchStr) {
-        searchStr = searchStr.replace(searchPrefixRex, emptyString);
-        var keyValues = searchStr.split(searchSplitor)
-            .filter(function(kv) {
-                return kv;
-            });
-
-        var searchObj = Object.create(null);
-
-        _.each(keyValues, function(kv) {
-            var kvArr = kv.split(searchKeyValueSplitor);
-            searchObj[kvArr[0]] = kvArr[1];
-        });
-
-        return searchObj;
-    }
-
-    function createSearchString(obj) {
-        var keyValueArray = _.toPairs(obj);
-
-        keyValueArray = keyValueArray.map(function(keyValue) {
-            return keyValue.join(searchKeyValueSplitor);
-        });
-
-        return searchPrefix + keyValueArray.join(searchSplitor);
-    }
 
 })(window, window); // 建议此处传入自己的名称空间
