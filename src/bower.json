@@ -1,0 +1,26 @@
+{
+  "name": "demo",
+  "homepage": "https://github.com/zhangaz1/transferDataByUrl",
+  "authors": [
+    "zhangaz1 <zhangaz1@hotmail.com>"
+  ],
+  "description": "demos",
+  "main": "index.html",
+  "keywords": [
+    "demo",
+    "test",
+    "temp"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.0",
+    "less": "^2.7.1"
+  }
+}
