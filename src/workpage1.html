@@ -14,11 +14,16 @@
 
 	<script type="text/javascript">
 		$(function() {
+			// 此代码建议放在业务代码执行前的位置
+
+			// 获取domain或其他数据的示例
 			var dataTransfer = window.dataTransfer;
 			var domainId = dataTransfer.getDomainId();
+
 			if (domainId) {
 				$('#domainId').text(domainId);
 			} else {
+				// TODO: 自行处理，此处仅作示例
 				alert('this no domain info, select a domain please!');
 				window.location.href = 'selectDomain.html';
 			}
