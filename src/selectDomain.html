@@ -21,24 +21,29 @@
 				var domainId = domainSelector.val();
 
 				console.log('change domain to: ', domainId)
-				dataTransfer.setDomainId(
-					domainId
-				);
+				dataTransfer.setDomainId(domainId);
 
-				$('a').each(function(index, ele) {
-					var urlObj = new Url(ele.href);
-					urlObj.updateSearchData({
-						d: domainId
-					});
-					var href = urlObj.getUrl();
-					// href = href.substring(0, location.origin.length); // ???
-					ele.href = href;
-				});
+				updateLinks(domainId);
 
 				if (!domainId) {
 					alert('warning: domain is null, select please.');
 				}
 			});
+
+			return void(0);
+
+			function updateLinks(domainId) {
+				$('a').each(function(index, ele) {
+					var urlObj = new Url(ele.href);
+					urlObj.updateSearchData({
+						d: domainId
+					});
+
+					var href = urlObj.getUrl();
+					// href = href.substring(0, location.origin.length); // ???
+					ele.href = href;
+				});
+			}
 		});
 	</script>
 
