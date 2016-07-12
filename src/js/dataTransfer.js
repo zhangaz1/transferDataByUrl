@@ -7,12 +7,17 @@
     var searchPrefixRex = new RegExp('^\\' + searchPrefix);
 
     class dataTransfer {
-        constructor(scope) {
+        constructor(scope, win) {
             this.parent = scope;
+            this._win = win;
+        }
+
+        get win() {
+            return this._win || window;
         }
 
         getSearchData(key = null) {
-            var location = win.location;
+            var location = this.win.location;
 
             var searchObj = getSearchObj(location.search);
 
@@ -22,7 +27,7 @@
         }
 
         setSearchData(data) {
-            var location = win.location;
+            var location = this.win.location;
 
             var searchObj = getSearchObj(location.search);
             searchObj = Object.assign(searchObj, data);
@@ -36,12 +41,12 @@
                 location.hash
             ].join(emptyString);
 
-            history.pushState(null, win.title, newUrl);
+            history.pushState(null, this.win.title, newUrl);
         }
     }
 
     if(!ns.dataTransfer) {
-        ns.dataTransfer = new dataTransfer(ns);
+        ns.dataTransfer = new dataTransfer(ns, win);
     }
 
     return void(0);
