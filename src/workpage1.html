@@ -11,10 +11,23 @@
 
 	<script type="text/javascript" src="js/dataTransfer.js"></script>
 
+	<script type="text/javascript">
+		$(function() {
+			var dataTransfer = window.dataTransfer;
+			var domainId = dataTransfer.getSearchData('domainId');
+			if (domainId) {
+				$('#domainId').val(domainId);
+			} else {
+				alert('this no domain info, select a domain please!');
+				window.location.href = 'selectDomain.html';
+			}
+		});
+	</script>
 </head>
 
 <body>
 	<h1>Work Page 1</h1>
+	<h2>domainId: <span id="domainId"></span></h2>
 </body>
 
 </html>
