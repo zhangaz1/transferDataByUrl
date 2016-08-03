@@ -29,13 +29,13 @@
         updateSearchData(data) {
             var urlObj = new ns.Url(this.win.location.href);
             urlObj.updateSearchData(data);
-            history.pushState(null, this.win.title, urlObj.getUrl());
+            history.replaceState(null, this.win.title, urlObj.getUrl());
         }
 
         setSearchData(data) {
             var urlObj = new ns.Url(this.win.location.href);
             urlObj.setSearchData(data);
-            history.pushState(null, this.win.title, urlObj.getUrl());
+            history.replaceState(null, this.win.title, urlObj.getUrl());
         }
     }
 
